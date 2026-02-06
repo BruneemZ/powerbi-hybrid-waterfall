@@ -1,0 +1,17 @@
+{
+		"version": "1.0.0.0",
+		"author": {"name":"Emmanuel Bruneau","email":"emmanuel.bruneau@example.com"},
+		"resources": [
+			{
+				"resourceId": "rId0",
+				"sourceType": 5,
+				"file": "resources/hybridWaterfallChartA1B2C3D4E5F67890.pbiviz.json"
+			}
+		],
+		"visual": {"name":"HybridWaterfallChart","displayName":"Hybrid Waterfall Chart","guid":"hybridWaterfallChartA1B2C3D4E5F67890","visualClassName":"Visual","version":"1.0.0.0","description":"A hybrid chart combining waterfall and bar chart with stacked values, subtotals and totals","supportUrl":"https://github.com/emmanuelbruneau/powerbi-hybrid-waterfall","gitHubUrl":"https://github.com/emmanuelbruneau/powerbi-hybrid-waterfall"},
+		"metadata": {
+			"pbivizjson": {
+				"resourceId": "rId0"
+			}
+		}
+	}
