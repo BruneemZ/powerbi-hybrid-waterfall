@@ -1,0 +1,128 @@
+{
+  "dataRoles": [
+    {
+      "displayName": "Category",
+      "name": "category",
+      "kind": "Grouping",
+      "description": "Category name for each bar (e.g., AZT, IT non AZT, Spend IT)"
+    },
+    {
+      "displayName": "Bar Type",
+      "name": "barType",
+      "kind": "Grouping",
+      "description": "Bar type: step, subtotal, total, or bar"
+    },
+    {
+      "displayName": "Values",
+      "name": "values",
+      "kind": "Measure",
+      "description": "Stacked measure values (multiple allowed)"
+    }
+  ],
+  "dataViewMappings": [
+    {
+      "conditions": [
+        {
+          "category": { "max": 1 },
+          "barType": { "max": 1 }
+        }
+      ],
+      "categorical": {
+        "categories": {
+          "select": [
+            { "for": { "in": "category" } },
+            { "for": { "in": "barType" } }
+          ],
+          "dataReductionAlgorithm": { "top": { "count": 100 } }
+        },
+        "values": {
+          "select": [
+            { "bind": { "to": "values" } }
+          ]
+        }
+      }
+    }
+  ],
+  "objects": {
+    "chartSettings": {
+      "displayName": "Chart Settings",
+      "properties": {
+        "barWidth": {
+          "displayName": "Bar Width",
+          "type": { "numeric": true }
+        },
+        "barGap": {
+          "displayName": "Bar Gap",
+          "type": { "numeric": true }
+        },
+        "showValues": {
+          "displayName": "Show Values",
+          "type": { "bool": true }
+        },
+        "valueFontSize": {
+          "displayName": "Value Font Size",
+          "type": { "numeric": true }
+        },
+        "showConnectors": {
+          "displayName": "Show Connectors",
+          "type": { "bool": true }
+        }
+      }
+    },
+    "colorSettings": {
+      "displayName": "Color Settings",
+      "properties": {
+        "defaultBarColor": {
+          "displayName": "Default Bar Color",
+          "type": { "fill": { "solid": { "color": true } } }
+        },
+        "subtotalColor": {
+          "displayName": "Subtotal Color",
+          "type": { "fill": { "solid": { "color": true } } }
+        },
+        "totalColor": {
+          "displayName": "Total Color",
+          "type": { "fill": { "solid": { "color": true } } }
+        },
+        "usePatternForSubtotal": {
+          "displayName": "Pattern for Subtotal",
+          "type": { "bool": true }
+        },
+        "usePatternForTotal": {
+          "displayName": "Pattern for Total",
+          "type": { "bool": true }
+        },
+        "separatorColor": {
+          "displayName": "Separator Color",
+          "type": { "fill": { "solid": { "color": true } } }
+        },
+        "connectorColor": {
+          "displayName": "Connector Color",
+          "type": { "fill": { "solid": { "color": true } } }
+        }
+      }
+    },
+    "axisSettings": {
+      "displayName": "Axis Settings",
+      "properties": {
+        "showXAxis": {
+          "displayName": "Show X Axis",
+          "type": { "bool": true }
+        },
+        "xAxisFontSize": {
+          "displayName": "X Axis Font Size",
+          "type": { "numeric": true }
+        },
+        "labelRotation": {
+          "displayName": "Label Rotation",
+          "type": { "numeric": true }
+        },
+        "xAxisColor": {
+          "displayName": "X Axis Color",
+          "type": { "fill": { "solid": { "color": true } } }
+        }
+      }
+    }
+  },
+  "privileges": []
+}
