@@ -296,8 +296,8 @@ export class Visual implements IVisual {
                 const current = this.bars[i];
                 const next = this.bars[i + 1];
 
-                // Only draw connector if both are waterfall-type bars
-                if (current.barType === "step" && next.barType === "step") {
+                // Draw connector if neither bar is of type "bar"
+                if (current.barType !== "bar" && next.barType !== "bar") {
                     const connector = document.createElementNS(svgNS, "line");
                     connector.setAttribute("x1", String(current.xPosition + barWidth));
                     connector.setAttribute("x2", String(next.xPosition));
