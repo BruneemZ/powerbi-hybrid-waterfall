@@ -146,15 +146,29 @@ export class Visual implements IVisual {
 
     private computeBarPositions(viewportWidth: number, viewportHeight: number): void {
         const chartSettings = this.formattingSettings.chartSettings;
-        const barWidth = chartSettings.barWidth.value;
-        const barGap = chartSettings.barGap.value;
+        const margin = { left: 50, right: 20 };
+
+        // Calculate available width and dynamic bar dimensions
+        const availableWidth = viewportWidth - margin.left - margin.right;
+        const numBars = this.bars.length;
+
+        // Calculate bar width and gap to fill the available space
+        // Gap is proportional to bar width (approximately barGap.value / barWidth.value ratio)
+        const gapRatio = chartSettings.barGap.value / chartSettings.barWidth.value;
+        const totalUnits = numBars + (numBars - 1) * gapRatio; // Each bar = 1 unit, each gap = gapRatio units
+        const dynamicBarWidth = Math.min(availableWidth / totalUnits, chartSettings.barWidth.value * 2); // Cap at 2x the setting
+        const dynamicBarGap = dynamicBarWidth * gapRatio;
 
         // Compute X positions
-        let currentX = 40; // Left margin
+        let currentX = margin.left;
         for (const bar of this.bars) {
             bar.xPosition = currentX;
-            currentX += barWidth + barGap;
+            currentX += dynamicBarWidth + dynamicBarGap;
         }
+
+        // Store computed values for rendering
+        (this as any)._computedBarWidth = dynamicBarWidth;
+        (this as any)._computedBarGap = dynamicBarGap;
 
         // Compute Y positions (waterfall logic)
         let runningTotal = 0;
@@ -197,7 +211,9 @@ export class Visual implements IVisual {
         const colorSettings = this.formattingSettings.colorSettings;
         const axisSettings = this.formattingSettings.axisSettings;
 
-        const barWidth = chartSettings.barWidth.value;
+        // Use dynamically computed bar width
+        const barWidth = (this as any)._computedBarWidth || chartSettings.barWidth.value;
+        const barGap = (this as any)._computedBarGap || chartSettings.barGap.value;
         const margin = { top: 30, right: 20, bottom: 60, left: 50 };
         const chartHeight = height - margin.top - margin.bottom;
 
@@ -249,7 +265,7 @@ export class Visual implements IVisual {
         let separatorX = -1;
         for (let i = 0; i < this.bars.length; i++) {
             if (this.bars[i].barType === "bar" && i > 0 && this.bars[i - 1].barType !== "bar") {
-                separatorX = this.bars[i].xPosition - chartSettings.barGap.value / 2;
+                separatorX = this.bars[i].xPosition - barGap / 2;
                 break;
             }
         }
