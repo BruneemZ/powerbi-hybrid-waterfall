@@ -290,27 +290,6 @@ export class Visual implements IVisual {
             this.svgContainer.appendChild(separator);
         }
 
-        // Draw connectors (for waterfall)
-        if (chartSettings.showConnectors.value) {
-            for (let i = 0; i < this.bars.length - 1; i++) {
-                const current = this.bars[i];
-                const next = this.bars[i + 1];
-
-                // Draw connector if neither bar is of type "bar"
-                if (current.barType !== "bar" && next.barType !== "bar") {
-                    const connector = document.createElementNS(svgNS, "line");
-                    connector.setAttribute("x1", String(current.xPosition + barWidth));
-                    connector.setAttribute("x2", String(next.xPosition));
-                    connector.setAttribute("y1", String(yScale(current.endY)));
-                    connector.setAttribute("y2", String(yScale(current.endY)));
-                    connector.setAttribute("stroke", colorSettings.connectorColor.value.value);
-                    connector.setAttribute("stroke-width", "1");
-                    connector.setAttribute("stroke-dasharray", "3,2");
-                    this.svgContainer.appendChild(connector);
-                }
-            }
-        }
-
         // Draw bars
         for (const bar of this.bars) {
             const barGroup = document.createElementNS(svgNS, "g");
@@ -419,6 +398,28 @@ export class Visual implements IVisual {
             }
 
             this.svgContainer.appendChild(barGroup);
+        }
+
+        // Draw connectors (for waterfall) - after bars so they appear on top
+        if (chartSettings.showConnectors.value) {
+            for (let i = 0; i < this.bars.length - 1; i++) {
+                const current = this.bars[i];
+                const next = this.bars[i + 1];
+
+                // Draw connector if neither bar is of type "bar"
+                if (current.barType !== "bar" && next.barType !== "bar") {
+                    const connectorY = yScale(current.endY);
+                    const connector = document.createElementNS(svgNS, "line");
+                    connector.setAttribute("x1", String(current.xPosition + barWidth));
+                    connector.setAttribute("x2", String(next.xPosition));
+                    connector.setAttribute("y1", String(connectorY));
+                    connector.setAttribute("y2", String(connectorY));
+                    connector.setAttribute("stroke", colorSettings.connectorColor.value.value);
+                    connector.setAttribute("stroke-width", "1.5");
+                    connector.setAttribute("stroke-dasharray", "4,3");
+                    this.svgContainer.appendChild(connector);
+                }
+            }
         }
 
         // X Axis labels
