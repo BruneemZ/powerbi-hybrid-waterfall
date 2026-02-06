@@ -13,6 +13,12 @@
       "description": "Bar type: step, subtotal, total, or bar"
     },
     {
+      "displayName": "Sequence",
+      "name": "sequence",
+      "kind": "Grouping",
+      "description": "Sort order for bars on X axis"
+    },
+    {
       "displayName": "Values",
       "name": "values",
       "kind": "Measure",
@@ -24,14 +30,16 @@
       "conditions": [
         {
           "category": { "max": 1 },
-          "barType": { "max": 1 }
+          "barType": { "max": 1 },
+          "sequence": { "max": 1 }
         }
       ],
       "categorical": {
         "categories": {
           "select": [
             { "for": { "in": "category" } },
-            { "for": { "in": "barType" } }
+            { "for": { "in": "barType" } },
+            { "for": { "in": "sequence" } }
           ],
           "dataReductionAlgorithm": { "top": { "count": 100 } }
         },

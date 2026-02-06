@@ -25,6 +25,7 @@ interface StackedValue {
 interface BarData {
     category: string;
     barType: BarType;
+    sequence: number;
     stackedValues: StackedValue[];
     totalValue: number;
     startY: number;
@@ -93,6 +94,7 @@ export class Visual implements IVisual {
 
         const categoryColumn = categorical.categories[0];
         const barTypeColumn = categorical.categories[1];
+        const sequenceColumn = categorical.categories.length > 2 ? categorical.categories[2] : null;
         const valueColumns = categorical.values || [];
 
         const bars: BarData[] = [];
@@ -102,6 +104,7 @@ export class Visual implements IVisual {
         for (let i = 0; i < categoryColumn.values.length; i++) {
             const category = String(categoryColumn.values[i] || "");
             const barTypeRaw = String(barTypeColumn.values[i] || "step").toLowerCase();
+            const sequence = sequenceColumn ? Number(sequenceColumn.values[i]) || i : i;
 
             // Map bar type
             let barType: BarType = "step";
@@ -131,6 +134,7 @@ export class Visual implements IVisual {
             bars.push({
                 category,
                 barType,
+                sequence,
                 stackedValues,
                 totalValue,
                 startY: 0,
@@ -138,6 +142,9 @@ export class Visual implements IVisual {
                 xPosition: 0
             });
         }
+
+        // Sort bars by sequence
+        bars.sort((a, b) => a.sequence - b.sequence);
 
         return bars;
     }
